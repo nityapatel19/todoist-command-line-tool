@@ -31,6 +31,7 @@ def done(name: str):
     tasks = todo.get_tasks()
     for task in tasks:
         if task.content == name:
+            print(f"{name} completed.")
             todo.close_task(task.id)
             break
 
@@ -53,7 +54,20 @@ def find(key: str):
 
 
 @app.command()
-def show_all():
+def find_project(key: str):
+    projects = todo.get_projects()
+    project_table = PrettyTable(['Sr. No.', 'Name'])
+    sr_no = 0
+    for project in projects:
+        if key in project.name:
+            sr_no += 1
+            name = project.name
+            project_table.add_row([sr_no, name])
+    print(project_table)
+
+
+@app.command()
+def list():
     tree = {}
     for task in todo.get_tasks():
         if task.project_id in tree:
@@ -62,32 +76,9 @@ def show_all():
             tree[task.project_id] = {}
             tree[task.project_id]['name'] = todo.get_project(task.project_id).name
             tree[task.project_id]['tasks'] = [task.content]
-    # print(json.dumps(tree, indent=4))
     pprint(tree)
 
 
 if __name__ == '__main__':
     app()
-    # todo.add_task("Test", priority=Priority.p2.value)
-
-# def get_tree(todo: TodoistAPI) -> dict:
-#     tree = {}
-#     for task in todo.get_tasks():
-#         if task.project_id in tree:
-#             tree[task.project_id].append(task.id)
-#         else:
-#             tree[task.project_id] = [task.id]
-#     return tree
-#
-#
-# # Developer Function
-# def get_tree_good(todo: TodoistAPI) -> dict:
-#     tree = {}
-#     for task in todo.get_tasks():
-#         if task.project_id in tree:
-#             tree[task.project_id]['tasks'].append((task.id, task.content))
-#         else:
-#             tree[task.project_id] = {}
-#             tree[task.project_id]['name'] = todo.get_project(task.project_id).name
-#             tree[task.project_id]['tasks'] = [(task.id, task.content)]
-#     return tree
+    # todo.add("Test", priority=Priority.p2.value)
