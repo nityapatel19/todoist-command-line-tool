@@ -1,6 +1,8 @@
+import os
 from enum import IntEnum
 from pprint import pprint
 
+import dotenv
 import typer
 from prettytable import PrettyTable
 from todoist_api_python.api import TodoistAPI
@@ -13,8 +15,8 @@ class Priority(IntEnum):
     p4 = 1
 
 
-TEST_API_TOKEN = "d2de1c89ce6061a3ddb0ad2ecfc88670bd6e14c9"
-todo = TodoistAPI(TEST_API_TOKEN)
+dotenv.load_dotenv()
+todo = TodoistAPI(os.getenv('API_TOKEN'))
 app = typer.Typer()
 
 
