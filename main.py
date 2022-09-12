@@ -1,10 +1,9 @@
-import json
 from enum import IntEnum
 from pprint import pprint
-from prettytable import PrettyTable
 
-from todoist_api_python.api import TodoistAPI
 import typer
+from prettytable import PrettyTable
+from todoist_api_python.api import TodoistAPI
 
 
 class Priority(IntEnum):
@@ -67,7 +66,7 @@ def find_project(key: str):
 
 
 @app.command()
-def list():
+def list_all():
     tree = {}
     for task in todo.get_tasks():
         if task.project_id in tree:
@@ -81,4 +80,3 @@ def list():
 
 if __name__ == '__main__':
     app()
-    # todo.add("Test", priority=Priority.p2.value)
