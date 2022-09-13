@@ -18,8 +18,6 @@ class Priority(IntEnum):
 
 
 logger = logging.getLogger(__name__)
-# dotenv.load_dotenv()
-todo = 'todoist'
 app = typer.Typer()
 
 
@@ -71,12 +69,14 @@ class Todoist:
 
     def list_all(self):
         tree = {}
-        for task in self.client.get_tasks():
+        tasks = self.client.get_tasks()
+        projects = self.client.get_projects()
+        for task in tasks:
             if task.project_id in tree:
                 tree[task.project_id]['tasks'].append(task.content)
             else:
                 tree[task.project_id] = {}
-                tree[task.project_id]['name'] = self.client.get_project(task.project_id).name
+                tree[task.project_id]['name'] = list(filter(lambda x: x.id == task.project_id, projects))[0].name
                 tree[task.project_id]['tasks'] = [task.content]
         pprint(tree)
 
