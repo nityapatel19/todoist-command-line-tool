@@ -43,9 +43,9 @@ class Todoist:
             self._client = TodoistAPI(token)
         return self._client
 
-    def add(self, name: str, time=None, date=None, priority: int = Priority.p4.value, description: str = '',
+    def add(self, name: str, date=None, priority: int = Priority.p4.value, description: str = '',
             project: int = None):
-        self.client.add_task(name, priority=priority, project=project, due_date_utc=date, due_time_utc=time,
+        self.client.add_task(name, priority=priority, project=project, due_date_utc=date,
                              description=description)
 
     def done(self, name: str):
