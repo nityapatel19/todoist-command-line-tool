@@ -73,7 +73,7 @@ class Todoist:
             print(table)
             choice = int(input("Enter your choice: "))
             self.client.close_task(matched_tasks[choice].id)
-            print(f'""{task.content}" completed.')
+            print(f'"{task.content}" completed.')
 
     def find_project(self, key: str):
         projects = self.client.get_projects()
