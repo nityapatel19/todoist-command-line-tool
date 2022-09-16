@@ -43,18 +43,37 @@ class Todoist:
             self._client = TodoistAPI(token)
         return self._client
 
-    def add(self, name: str, date=None, priority: int = Priority.p4.value, description: str = '',
-            project: int = None):
+    def add(self, name: str = typer.Argument(...), date=None, priority: int = Priority.p4.value,
+            description: str = '', project: int = None):
         self.client.add_task(name, priority=priority, project=project, due_date_utc=date,
                              description=description)
 
     def done(self, name: str):
         tasks = self.client.get_tasks()
-        for task in tasks:
-            if task.content == name:
-                print(f"{name} completed.")
-                self.client.close_task(task.id)
-                break
+        projects = self.client.get_projects()
+        matched_tasks = list(filter(lambda x: name in x.content, tasks))
+        if len(matched_tasks) == 0:
+            print("No matching task.")
+        elif len(matched_tasks) == 1:
+            task = matched_tasks[0]
+            self.client.close_task(task.id)
+            print(f'""{task.content}" completed.')
+        else:
+            print("Multiple tasks found. Please select one.")
+            table = PrettyTable(['Sr. No.', 'Name', 'Priority', 'Due Date', 'Project', 'Description'])
+            sr_no = 0
+            for task in matched_tasks:
+                name = task.content
+                priority = Priority(1).name
+                due_date = task.due.string if task.due else ""
+                project = list(filter(lambda x: x.id == task.project_id, projects))[0].name
+                description = task.description
+                table.add_row([sr_no, name, priority, due_date, project, description])
+                sr_no += 1
+            print(table)
+            choice = int(input("Enter your choice: "))
+            self.client.close_task(matched_tasks[choice].id)
+            print(f'""{task.content}" completed.')
 
     def find_project(self, key: str):
         projects = self.client.get_projects()
