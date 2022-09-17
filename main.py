@@ -57,7 +57,7 @@ class Todoist:
         elif len(matched_tasks) == 1:
             task = matched_tasks[0]
             self.client.close_task(task.id)
-            print(f'""{task.content}" completed.')
+            print(f'"{task.content}" completed.')
         else:
             print("Multiple tasks found. Please select one.")
             table = PrettyTable(['Sr. No.', 'Name', 'Priority', 'Due Date', 'Project', 'Description'])
@@ -73,7 +73,22 @@ class Todoist:
             print(table)
             choice = int(input("Enter your choice: "))
             self.client.close_task(matched_tasks[choice].id)
-            print(f'"{task.content}" completed.')
+            print(f'"{matched_tasks[choice].content}" completed.')
+
+    def find(self, key: str):
+        tasks = self.client.get_tasks()
+        task_table = PrettyTable(['Sr. No.', 'Name', 'Priority', 'Due Date', 'Project', 'Description'])
+        sr_no = 0
+        for task in tasks:
+            if key in task.content:
+                sr_no += 1
+                name = task.content
+                priority = Priority(1).name
+                due_date = task.due.string if task.due else ""
+                project = self.client.get_project(task.project_id).name
+                description = task.description
+                task_table.add_row([sr_no, name, priority, due_date, project, description])
+        print(task_table)
 
     def find_project(self, key: str):
         projects = self.client.get_projects()
@@ -92,27 +107,24 @@ class Todoist:
         projects = self.client.get_projects()
         for task in tasks:
             if task.project_id in tree:
-                tree[task.project_id]['tasks'].append(task.content)
+                tree[task.project_id]['tasks'].append(task)
             else:
                 tree[task.project_id] = {}
                 tree[task.project_id]['name'] = list(filter(lambda x: x.id == task.project_id, projects))[0].name
-                tree[task.project_id]['tasks'] = [task.content]
-        pprint(tree)
+                tree[task.project_id]['tasks'] = [task]
 
-    def find(self, key: str):
-        tasks = self.client.get_tasks()
-        task_table = PrettyTable(['Sr. No.', 'Name', 'Priority', 'Due Date', 'Project', 'Description'])
-        sr_no = 0
-        for task in tasks:
-            if key in task.content:
-                sr_no += 1
+        table = PrettyTable(['Sr. No.', 'Name', 'Priority', 'Due Date', 'Project', 'Description'])
+        for project_id, project in tree.items():
+            sr_no = 0
+            for task in project['tasks']:
                 name = task.content
-                priority = Priority(1).name
+                priority = Priority(task.priority).name
                 due_date = task.due.string if task.due else ""
-                project = self.client.get_project(task.project_id).name
+                project_name = project['name']
                 description = task.description
-                task_table.add_row([sr_no, name, priority, due_date, project, description])
-        print(task_table)
+                table.add_row([sr_no, name, priority, due_date, project_name, description])
+                sr_no += 1
+        pprint(table)
 
 
 todoist = Todoist()
