@@ -43,10 +43,36 @@ class Todoist:
             self._client = TodoistAPI(token)
         return self._client
 
-    def add(self, name: str = typer.Argument(...), date=None, priority: int = Priority.p4.value,
-            description: str = '', project: int = None):
-        self.client.add_task(name, priority=priority, project=project, due_date_utc=date,
+    def add(self, name: str = typer.Argument(...), due: Optional[str] = None, priority: int = 4,
+            description: str = '', project: Optional[str] = None):
+        project_id = None
+        priority_value = Priority(priority).value
+
+        if project:
+            projects = self.client.get_projects()
+            matched_projects = list(filter(lambda x: project in x.name, projects))
+            if len(matched_projects) == 0:
+                project_id = self.client.add_project(project).id
+                print(f'Project "{project}" created.')
+            elif len(matched_projects) == 1:
+                project_id = matched_projects[0].id
+            else:
+                print("Multiple projects found. Please select one.")
+                table = PrettyTable(['Sr. No.', 'Name'])
+                sr_no = 0
+                for project in matched_projects:
+                    name = project.name
+                    table.add_row([sr_no, name])
+                    sr_no += 1
+                print(table)
+                choice = int(input("Enter your choice: "))
+                project_id = matched_projects[choice].id
+
+        self.client.add_task(name, priority=priority_value, project_id=project_id, due_string=due, due_lang="en",
                              description=description)
+
+    def add_new_project(self, name: str):
+        return self.client.add_project(name).id
 
     def done(self, name: str):
         tasks = self.client.get_tasks()
@@ -130,6 +156,7 @@ class Todoist:
 todoist = Todoist()
 app.command()(set_token)
 app.command()(todoist.add)
+app.command(name='add-project')(todoist.add_new_project)
 app.command()(todoist.done)
 app.command()(todoist.find)
 app.command()(todoist.find_project)
