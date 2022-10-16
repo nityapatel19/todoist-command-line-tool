@@ -1,5 +1,4 @@
 import os
-import logging
 from enum import IntEnum
 from typing import Optional
 
@@ -16,7 +15,6 @@ class Priority(IntEnum):
     p4 = 1
 
 
-logger = logging.getLogger(__name__)
 app = typer.Typer()
 
 
