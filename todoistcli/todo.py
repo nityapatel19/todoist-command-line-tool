@@ -1,7 +1,6 @@
 import os
 import logging
 from enum import IntEnum
-from pprint import pprint
 from typing import Optional
 
 import dotenv
@@ -150,7 +149,7 @@ class Todoist:
                 description = task.description
                 table.add_row([sr_no, name, priority, due_date, project_name, description])
                 sr_no += 1
-        pprint(table)
+        print(table)
 
 
 todoist = Todoist()
@@ -161,6 +160,7 @@ app.command()(todoist.done)
 app.command()(todoist.find)
 app.command()(todoist.find_project)
 app.command(name='list')(todoist.list_all)
+
 
 if __name__ == '__main__':
     app()
