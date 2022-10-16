@@ -1,0 +1,48 @@
+[project]
+name = "todoistcli"
+version = "0.1.0"
+description = "A command line tool for Todoist."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+keywords = ["tasks", "todoist", "todo", "productivity"]
+authors = [
+  {email = "nityapatel19@gmail.com"},
+  {name = "Nitya Patel"}
+]
+maintainers = [
+  {name = "Nitya Patel", email = "nityapatel19@gmail.com"}
+]
+classifiers = [
+  "Development Status :: Beta",
+  "Programming Language :: Python"
+]
+
+dependencies = [
+  "prettytable>=3.4.1",
+  "python-dotenv>=0.21.0",
+  "todoist-api-python>=2.0.0",
+  "typer>=0.6.1"
+]
+
+# [project.optional-dependencies]
+# test = [
+#   "pytest < 5.0.0",
+#   "pytest-cov[all]"
+# ]
+
+[project.urls]
+# homepage = "https://example.com"
+# documentation = "https://readthedocs.org"
+repository = "https://github.com/nityapatel19/todoist-command-line-tool/"
+# changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+# [project.scripts]
+# spam-cli = "spam:main_cli"
+
+# [project.gui-scripts]
+# spam-gui = "spam:main_gui"
+
+# [project.entry-points."spam.magical"]
+# tomatoes = "spam:main_tomatoes"
+
