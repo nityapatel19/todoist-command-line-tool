@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A command line tool for Todoist."
 readme = "README.md"
 requires-python = ">=3.10"
-license = {file = "LICENSE"}
+license = "MIT"
 keywords = ["tasks", "todoist", "todo", "productivity"]
 authors = [
   {email = "nityapatel19@gmail.com"},
@@ -33,7 +33,7 @@ dependencies = [
 
 [project.urls]
 # homepage = "https://example.com"
-# documentation = "https://readthedocs.org"
+documentation = "https://github.com/nityapatel19/todoist-command-line-tool/blob/main/README.md"
 repository = "https://github.com/nityapatel19/todoist-command-line-tool/"
 # changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
