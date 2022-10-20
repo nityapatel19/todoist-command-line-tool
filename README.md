@@ -16,4 +16,4 @@ We need to update this file.
 ---
 
 ## License
-
+Licensed under the MIT License. Copyright (c) 2022 Nitya Patel. [Link to the license](https://github.com/nityapatel19/todoist-command-line-tool/blob/main/LICENSE).
